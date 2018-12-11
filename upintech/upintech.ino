@@ -189,7 +189,7 @@ void mode1()
         viewMidiinfos();
         readEnc1();
     }
-    AlloldNoteOff(curoctave);
+    AlloldNoteOff(curoctave, cur_chou);
     midi.end();
 }
 
@@ -236,6 +236,11 @@ void viewMidiinfos()
     tft.setTextSize(2);
     tft.print("OCTAVE:");
     tft.print(curoctave);
+    tft.setCursor(32, 192);
+    tft.setTextColor(ILI9341_YELLOW);
+    tft.setTextSize(2);
+    tft.print("OCTAVE:");
+    tft.print(cur_chou);
 }
 
 void setPins()
