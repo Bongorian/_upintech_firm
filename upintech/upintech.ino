@@ -115,12 +115,12 @@ void isPianoactive(int shift)
             if (midikeyarray[i] == 202)
             {
                 old_chou = cur_chou;
-                cur_chou--;
+                cur_chou++;
             }
             else if (midikeyarray[i] == 203)
             {
                 old_chou = cur_chou;
-                cur_chou++;
+                cur_chou--;
             }
             else if (midikeyarray[i] != 255)
             {
@@ -129,16 +129,22 @@ void isPianoactive(int shift)
         }
         else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
         {
-            if (midikeyarray[i] < 128)
-            {
-                midi.sendNoteOn(0, midikeyarray[i] + shift, 127);
-            }
         }
         else
         {
-            if (midikeyarray[i] != 255)
+            if ((midikeyarray[i] != 255))
             {
-                midi.sendNoteOff(0, midikeyarray[i] + shift, 127);
+                if ((i == 16) || (i == 39))
+                {
+                    if ((islongpressKeys[16] == 0) && (islongpressKeys[39] == 0))
+                    {
+                        midi.sendNoteOff(0, midikeyarray[i] + shift, 127);
+                    }
+                }
+                else
+                {
+                    midi.sendNoteOff(0, midikeyarray[i] + shift, 127);
+                }
             }
         }
     }
@@ -169,7 +175,7 @@ void AlloldNoteOff(int octave, int chou)
 
 void mode0()
 {
-    char *title = "MODE0 SETTING";
+    char *title = "MODE0_USB_KEYBOARD";
     setTitle(32, 0, ILI9341_BLACK, ILI9341_WHITE, 2, title);
     while (mode == 0)
     {
