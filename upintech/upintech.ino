@@ -49,7 +49,7 @@ int cur_chou;
 int old_chou;
 int curoctave;
 int oldoctave;
-byte midikeyarray[40] = {200, 202, 203, 201, 255, 255, 255, 255,
+byte midikeyarray[40] = {200, 255, 202, 255, 203, 255, 201, 255,
                          255, 73, 75, 255, 78, 80, 82, 255,
                          72, 74, 76, 77, 79, 81, 83, 84,
                          255, 61, 63, 255, 66, 68, 70, 255,
@@ -129,6 +129,10 @@ void isPianoactive(int shift)
         }
         else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
         {
+            if (midikeyarray[i] < 128)
+            {
+                midi.sendNoteOn(0, midikeyarray[i] + shift, 127);
+            }
         }
         else
         {
@@ -177,7 +181,7 @@ void mode1()
 {
     midi.begin();
     char *title = "MODE1_MIDI_KEY";
-    setTitle(32, 0, ILI9341_RED, ILI9341_WHITE, 2, title);
+    setTitle(32, 8, ILI9341_RED, ILI9341_WHITE, 2, title);
     while (mode == 1)
     {
         readKeys();
