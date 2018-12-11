@@ -49,7 +49,7 @@ int cur_chou;
 int old_chou;
 int curoctave;
 int oldoctave;
-byte midikeyarray[40] = {201, 200, 202, 203, 255, 255, 255, 255,
+byte midikeyarray[40] = {200, 202, 203, 201, 255, 255, 255, 255,
                          255, 73, 75, 255, 78, 80, 82, 255,
                          72, 74, 76, 77, 79, 81, 83, 84,
                          255, 61, 63, 255, 66, 68, 70, 255,
@@ -115,12 +115,12 @@ void isPianoactive(int shift)
             if (midikeyarray[i] == 202)
             {
                 old_chou = cur_chou;
-                cur_chou++;
+                cur_chou--;
             }
             else if (midikeyarray[i] == 203)
             {
                 old_chou = cur_chou;
-                cur_chou--;
+                cur_chou++;
             }
             else if (midikeyarray[i] != 255)
             {
@@ -181,9 +181,10 @@ void mode1()
     while (mode == 1)
     {
         readKeys();
+        readJoystick();
         if (octaveChange())
         {
-            AlloldNoteOff(oldoctave, old_chou);
+            // AlloldNoteOff(oldoctave, old_chou);
         }
         setNote(curoctave);
         viewMidiinfos();
@@ -236,11 +237,19 @@ void viewMidiinfos()
     tft.setTextSize(2);
     tft.print("OCTAVE:");
     tft.print(curoctave);
-    tft.setCursor(32, 192);
+    tft.setCursor(32, 184);
     tft.setTextColor(ILI9341_YELLOW);
     tft.setTextSize(2);
-    tft.print("OCTAVE:");
+    tft.print("SHIFT:");
     tft.print(cur_chou);
+    tft.setCursor(32, 208);
+    tft.setTextColor(ILI9341_BLUE);
+    tft.setTextSize(2);
+    tft.print("ANALOG:");
+    tft.print("x:");
+    tft.print(curjoystick[0]);
+    tft.print("y:");
+    tft.print(curjoystick[1]);
 }
 
 void setPins()
