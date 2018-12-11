@@ -266,8 +266,8 @@ void setPins()
     pinMode(RE_1_B, INPUT);
     pinMode(RE_2_A, INPUT);
     pinMode(RE_2_B, INPUT);
-    pinMode(JOYX, INPUT);
-    pinMode(JOYY, INPUT);
+    pinMode(JOYX, INPUT_PULLUP);
+    pinMode(JOYY, INPUT_PULLUP);
     pinMode(JOY_SW, INPUT_PULLUP);
     pinMode(RE_1_SW, INPUT_PULLUP);
     pinMode(RE_2_SW, INPUT_PULLUP);
