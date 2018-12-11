@@ -136,7 +136,7 @@ void isPianoactive(int shift)
             {
                 if ((i == 16) || (i == 39))
                 {
-                    if ((islongpressKeys[16] == 0) && (islongpressKeys[39] == 0))
+                    if ((curKeys[16] == 0) && (curKeys[39] == 0))
                     {
                         midi.sendNoteOff(0, midikeyarray[i] + shift, 127);
                     }
