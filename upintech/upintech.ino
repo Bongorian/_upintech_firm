@@ -45,9 +45,11 @@ int encoder1PinANow = LOW;
 int encoder1PinALast = LOW;
 int mode;
 int cursor = 0;
+int cur_chou;
+int old_chou;
 int curoctave;
 int oldoctave;
-byte midikeyarray[40] = {201, 200, 255, 255, 255, 255, 255, 255,
+byte midikeyarray[40] = {201, 200, 202, 203, 255, 255, 255, 255,
                          255, 73, 75, 255, 78, 80, 82, 255,
                          72, 74, 76, 77, 79, 81, 83, 84,
                          255, 61, 63, 255, 66, 68, 70, 255,
@@ -91,7 +93,7 @@ void loop(void)
 void setNote(int octave)
 {
     int shift = octave * 12;
-    isPianoactive(shift);
+    isPianoactive(shift + cur_chou);
 }
 
 void isPianoactive(int shift)
@@ -103,12 +105,22 @@ void isPianoactive(int shift)
             if (midikeyarray[i] == 200)
             {
                 oldoctave = curoctave;
-                curoctave ++;
+                curoctave++;
             }
             else if (midikeyarray[i] == 201)
             {
                 oldoctave = curoctave;
-                curoctave -=;
+                curoctave--;
+            }
+            if (midikeyarray[i] == 202)
+            {
+                old_chou = cur_chou;
+                cur_chou++;
+            }
+            else if (midikeyarray[i] == 203)
+            {
+                old_chou = cur_chou;
+                cur_chou--;
             }
             else if (midikeyarray[i] != 255)
             {
@@ -139,14 +151,14 @@ bool octaveChange()
     }
 }
 
-void AlloldNoteOff(int octave)
+void AlloldNoteOff(int octave, int chou)
 {
     int oldshift = octave * 12;
     for (int i = 0; i < 40; i++)
     {
         if (midikeyarray[i] < 128)
         {
-            midi.sendNoteOff(0, midikeyarray[i] + oldshift, 127);
+            midi.sendNoteOn(0, midikeyarray[i] + oldshift + chou, 0);
         }
     }
 }
@@ -171,7 +183,7 @@ void mode1()
         readKeys();
         if (octaveChange())
         {
-            AlloldNoteOff(oldoctave);
+            AlloldNoteOff(oldoctave, old_chou);
         }
         setNote(curoctave);
         viewMidiinfos();
