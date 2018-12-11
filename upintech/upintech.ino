@@ -103,12 +103,12 @@ void isPianoactive(int shift)
             if (midikeyarray[i] == 200)
             {
                 oldoctave = curoctave;
-                curoctave + 1;
+                curoctave ++;
             }
             else if (midikeyarray[i] == 201)
             {
                 oldoctave = curoctave;
-                curoctave - 1;
+                curoctave -=;
             }
             else if (midikeyarray[i] != 255)
             {
