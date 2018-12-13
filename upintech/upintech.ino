@@ -63,6 +63,8 @@ byte midibassarray[40] = {200, 255, 202, 255, 203, 255, 201, 255,
 
 Adafruit_ILI9341_STM tft = Adafruit_ILI9341_STM(TFT_CS, TFT_DC, TFT_RST);
 USBMIDI midi;
+USBHID HID;
+HIDKeyboard Keyboard(HID);
 
 void setup()
 {
@@ -80,13 +82,20 @@ void loop(void)
     switch (mode)
     {
     case 0:
+        HID.begin(HID_KEYBOARD);
+        Keyboard.begin();
         mode0();
+        HID.end();
         break;
     case 1:
+        midi.begin();
         mode1();
+        midi.end();
         break;
     case 2:
+        midi.begin();
         mode2();
+        midi.end();
         break;
     case 3:
     case 4:
@@ -102,20 +111,23 @@ void Setlogo()
 {
 }
 
-void mode0()
+void mode0() //mode USB HID
 {
-    midi.end();
+
     char *title = "MODE0_USB_KEYBOARD";
     setTitle(32, 0, ILI9341_BLACK, ILI9341_WHITE, 2, title);
     while (mode == 0)
     {
+        readKeys();
+        readJoystick();
+        setKeys();
+        viewKeyboardinfos();
         readEnc1();
     }
 }
 
 void mode1()
 {
-    midi.begin();
     char *title = "MODE1_MIDI_KEYBOARD";
     setTitle(32, 0, ILI9341_RED, ILI9341_WHITE, 2, title);
     while (mode == 1)
@@ -153,6 +165,27 @@ void setTitle(int x, int y, uint16_t backgroundcolor, uint16_t textcolor, uint8_
     tft.setTextColor(textcolor);
     tft.setTextSize(textsize);
     tft.println(title);
+}
+
+void setKeys()
+{
+    for (int i = 0; i < 40; i++)
+    {
+        if ((curKeys[i] == 1) && (islongpressKeys[i] == 0))
+        {
+            Keyboard.println("bongorian");
+        }
+        else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
+        {
+        }
+        else
+        {
+        }
+    }
+}
+
+void viewKeyboardinfos()
+{
 }
 
 void viewMidiPianoinfos()
