@@ -61,6 +61,23 @@ byte midibassarray[40] = {200, 255, 202, 255, 203, 255, 201, 255,
                           38, 39, 40, 41, 42, 43, 44, 45,
                           33, 34, 35, 36, 37, 38, 39, 40,
                           28, 29, 30, 31, 32, 33, 34, 35};
+byte keyMap[40] = {113, 119, 9, 97, 16, 122, 17, 18,
+                   101, 114, 116, 121, 117, 105, 111, 112,
+                   115, 100, 102, 103, 104, 106, 107, 108,
+                   120, 99, 118, 98, 110, 109, 8, 27,
+                   91, 254, 32, 32, 255, 37, 39, 13};
+
+byte keyMapLOW[40] = {49, 50, 9, 253, 16, 253, 17, 18,
+                      51, 52, 53, 54, 55, 56, 57, 49,
+                      63, 64, 58, 59, 60, 61, 62, 126,
+                      91, 92, 93, 123, 124, 125, 8, 27,
+                      91, 254, 32, 32, 255, 37, 39, 13};
+
+byte keyMapHIGH[40] = {49, 50, 9, 33, 16, 42, 17, 18,
+                       51, 52, 53, 54, 55, 56, 57, 49,
+                       34, 35, 36, 37, 38, 39, 40, 41,
+                       43, 44, 45, 46, 47, 95, 8, 27,
+                       91, 254, 32, 32, 255, 37, 39, 13};
 
 Adafruit_ILI9341_STM tft = Adafruit_ILI9341_STM(TFT_CS, TFT_DC, TFT_RST);
 USBMIDI midi;
@@ -205,12 +222,68 @@ void setKeys()
 {
     for (int i = 0; i < 40; i++)
     {
+
         if ((curKeys[i] == 1) && (islongpressKeys[i] == 0))
         {
-            Keyboard.write(65);
+            if (curKeys[33] == 1)
+            {
+                Keyboard.write(keyMapLOW[i]);
+            }
+            if (curKeys[36] == 1)
+            {
+                Keyboard.write(keyMapHIGH[i]);
+            }
+            if (curKeys[33] == 0 && curKeys[36] == 0)
+            {
+                if (curKeys[4] == 1)
+                {
+                    if (keyMap[i] > 96 && keyMap[i] < 123)
+                    {
+                        Keyboard.write(keyMap[i] - 32)
+                    }
+                    else
+                    {
+                        Keyboard.write(keyMap[i]);
+                    }
+                }
+                else
+                {
+                    Keyboard.write(keyMap[i]);
+                }
+            }
         }
         else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
         {
+            if (islongpressKeys[i] > 10000)
+            {
+                if (curKeys[33] == 1)
+                {
+                    Keyboard.write(keyMapLOW[i]);
+                }
+                if (curKeys[36] == 1)
+                {
+                    Keyboard.write(keyMapHIGH[i]);
+                }
+                if (curKeys[33] == 0 && curKeys[36] == 0)
+                {
+                    if (curKeys[4] == 1)
+                    {
+                        if (keyMap[i] > 96 && keyMap[i] < 123)
+                        {
+                            Keyboard.write(keyMap[i] - 32)
+                        }
+                        else
+                        {
+                            Keyboard.write(keyMap[i]);
+                        }
+                    }
+                    else
+                    {
+                        Keyboard.write(keyMap[i]);
+                    }
+                }
+            }
+            islongpressKeys[i] = 0;
         }
         else
         {
