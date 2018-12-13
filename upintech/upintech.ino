@@ -134,7 +134,7 @@ void mode1()
         readJoystick();
         checkPots();
         setNote_Piano(curoctave);
-        setCC();
+        setCC(0);
         viewMidiPianoinfos();
         readEnc1();
     }
