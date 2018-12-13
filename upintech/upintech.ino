@@ -55,6 +55,12 @@ byte midikeyarray[40] = {200, 255, 202, 255, 203, 255, 201, 255,
                          255, 61, 63, 255, 66, 68, 70, 255,
                          60, 62, 64, 65, 67, 69, 71, 72};
 
+byte midibassarray[40] = {200, 255, 202, 255, 203, 255, 201, 255,
+                          43, 44, 45, 46, 47, 48, 49, 50,
+                          38, 39, 40, 41, 42, 43, 44, 45,
+                          33, 34, 35, 36, 37, 38, 39, 40,
+                          28, 29, 30, 31, 32, 33, 34, 35};
+
 Adafruit_ILI9341_STM tft = Adafruit_ILI9341_STM(TFT_CS, TFT_DC, TFT_RST);
 USBMIDI midi;
 
@@ -80,6 +86,8 @@ void loop(void)
         mode1();
         break;
     case 2:
+        mode2();
+        break;
     case 3:
     case 4:
     case 5:
@@ -90,10 +98,149 @@ void loop(void)
     }
 }
 
-void setNote(int octave)
+void Setlogo
+{
+}
+
+void mode0()
+{
+    char *title = "MODE0_USB_KEYBOARD";
+    setTitle(32, 0, ILI9341_BLACK, ILI9341_WHITE, 2, title);
+    while (mode == 0)
+    {
+        readEnc1();
+    }
+}
+
+void mode1()
+{
+    midi.begin();
+    char *title = "MODE1_MIDI_KEYBOARD";
+    setTitle(32, 8, ILI9341_RED, ILI9341_WHITE, 2, title);
+    while (mode == 1)
+    {
+        readKeys();
+        readJoystick();
+        setNote_Piano(curoctave);
+        viewMidiPianoinfos();
+        readEnc1();
+    }
+    AlloldNoteOff(curoctave, cur_chou);
+    midi.end();
+}
+
+void mode2()
+{
+    midi.begin();
+    char *title = "MODE1_MIDI_BASS";
+    setTitle(32, 8, ILI9341_GREEN, ILI9341_WHITE, 2, title);
+    while (mode == 1)
+    {
+        readKeys();
+        readJoystick();
+        checkPots();
+        setNote_Bass(curoctave);
+        viewMidiBassinfos();
+        readEnc1();
+    }
+    AlloldNoteOff(curoctave, cur_chou);
+    midi.end();
+}
+
+void setTitle(int x, int y, uint16_t backgroundcolor, uint16_t textcolor, uint8_t textsize, char *title)
+{
+    tft.fillScreen(backgroundcolor);
+    tft.setCursor(x, y);
+    tft.setTextColor(textcolor);
+    tft.setTextSize(textsize);
+    tft.println(title);
+}
+
+void viewMidiPianoinfos()
+{
+    viewPodinfo(ILI9341_GREEN, ILI9341_WHITE, ILI9341_RED);
+    tft.setCursor(32, 160);
+    tft.setTextColor(ILI9341_GREEN);
+    tft.setTextSize(2);
+    tft.print("OCTAVE:");
+    tft.print(curoctave);
+    tft.setCursor(32, 184);
+    tft.setTextColor(ILI9341_YELLOW);
+    tft.setTextSize(2);
+    tft.print("SHIFT:");
+    tft.print(cur_chou);
+    tft.setCursor(32, 208);
+    tft.setTextColor(ILI9341_BLUE);
+    tft.setTextSize(2);
+    tft.print("ANALOG:");
+    tft.print("x:");
+    tft.print(curjoystick[0]);
+    tft.print("y:");
+    tft.print(curjoystick[1]);
+}
+
+void viewMidiBassinfos()
+{
+    viewPodinfo(ILI9341_RED, ILI9341_WHITE, ILI9341_GREEN);
+    tft.setCursor(32, 160);
+    tft.setTextColor(ILI9341_PINK);
+    tft.setTextSize(2);
+    tft.print("OCTAVE:");
+    tft.print(curoctave);
+    tft.setCursor(32, 184);
+    tft.setTextColor(ILI9341_YELLOW);
+    tft.setTextSize(2);
+    tft.print("SHIFT:");
+    tft.print(cur_chou);
+    tft.setCursor(32, 208);
+    tft.setTextColor(ILI9341_BLUE);
+    tft.setTextSize(2);
+    tft.print("ANALOG:");
+    tft.print("x:");
+    tft.print(curjoystick[0]);
+    tft.print("y:");
+    tft.print(curjoystick[1]);
+}
+
+void viewPodinfo(uint16_t textcol1, uint16_t textcol2, uint16_t background)
+{
+    tft.fillRect(0, 16, 320, 224, background);
+    tft.setTextSize(1);
+    for (int i = 0; i < 16; i++)
+    {
+        if (i < 8)
+        {
+            tft.setCursor(((i + 1) * 32), 32);
+            tft.setTextColor(textcol1);
+            tft.print("P");
+            tft.print(i + 1);
+            tft.setCursor(((i + 1) * 32), 64);
+            tft.setTextColor(textcol2);
+            tft.print(curpots[i]);
+        }
+        else
+        {
+            tft.setCursor(((i - 7) * 32), 96);
+            tft.setTextColor(textcol1);
+            tft.print("P");
+            tft.print(i + 1);
+            tft.setCursor(((i - 7) * 32), 128);
+            tft.setTextColor(textcol2);
+            tft.print(curpots[i]);
+        }
+    }
+}
+
+void setNote_Piano(int octave)
 {
     int shift = octave * 12;
     isPianoactive(shift + cur_chou);
+}
+
+void setNote_Bass(int octave)
+{
+    int shift = octave * 12;
+    isBassactive(shift + cur_chou);
 }
 
 void isPianoactive(int shift)
@@ -122,7 +269,7 @@ void isPianoactive(int shift)
                 old_chou = cur_chou;
                 cur_chou--;
             }
-            else if (midikeyarray[i] != 255)
+            else if (midikeyarray[i] < 128)
             {
                 midi.sendNoteOn(0, midikeyarray[i] + shift, 127);
             }
@@ -132,7 +279,7 @@ void isPianoactive(int shift)
         }
         else
         {
-            if ((midikeyarray[i] != 255))
+            if (midikeyarray[i] < 128)
             {
                 if ((i == 16) || (i == 39))
                 {
@@ -149,6 +296,61 @@ void isPianoactive(int shift)
         }
     }
 }
+
+void isBassactive(int shift)
+{
+    for (int i = 0; i < 40; i++)
+    {
+        if ((curKeys[i] == 1) && (islongpressKeys[i] == 0))
+        {
+            if (midibassarray[i] == 200)
+            {
+                oldoctave = curoctave;
+                curoctave++;
+            }
+            else if (midibassarray[i] == 201)
+            {
+                oldoctave = curoctave;
+                curoctave--;
+            }
+            if (midibassarray[i] == 202)
+            {
+                old_chou = cur_chou;
+                cur_chou++;
+            }
+            else if (midibassarray[i] == 203)
+            {
+                old_chou = cur_chou;
+                cur_chou--;
+            }
+            else if (midibassarray[i] < 128)
+            {
+                midi.sendNoteOn(0, midibarassray[i] + shift, 127);
+            }
+        }
+        else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
+        {
+        }
+        else
+        {
+            if (midibassarray[i] < 128)
+            {
+                if (i > 20)
+                {
+                    if ((curKeys[i] == 0) && (curKeys[i - 13] == 0))
+                    {
+                        midi.sendNoteOff(0, midibassarray[i] + shift, 127);
+                    }
+                }
+                else
+                {
+                    midi.sendNoteOff(0, midibassarray[i] + shift, 127);
+                }
+            }
+        }
+    }
+}
+
 bool octaveChange()
 {
     if (oldoctave == curoctave)
@@ -171,95 +373,6 @@ void AlloldNoteOff(int octave, int chou)
             midi.sendNoteOn(0, midikeyarray[i] + oldshift + chou, 0);
         }
     }
-}
-
-void mode0()
-{
-    char *title = "MODE0_USB_KEYBOARD";
-    setTitle(32, 0, ILI9341_BLACK, ILI9341_WHITE, 2, title);
-    while (mode == 0)
-    {
-        readEnc1();
-    }
-}
-
-void mode1()
-{
-    midi.begin();
-    char *title = "MODE1_MIDI_KEY";
-    setTitle(32, 8, ILI9341_RED, ILI9341_WHITE, 2, title);
-    while (mode == 1)
-    {
-        readKeys();
-        readJoystick();
-        if (octaveChange())
-        {
-            // AlloldNoteOff(oldoctave, old_chou);
-        }
-        setNote(curoctave);
-        viewMidiinfos();
-        readEnc1();
-    }
-    AlloldNoteOff(curoctave, cur_chou);
-    midi.end();
-}
-
-void setTitle(int x, int y, uint16_t backgroundcolor, uint16_t textcolor, uint8_t textsize, char *title)
-{
-    tft.fillScreen(backgroundcolor);
-    tft.setCursor(x, y);
-    tft.setTextColor(textcolor);
-    tft.setTextSize(textsize);
-    tft.println(title);
-}
-
-void viewMidiinfos()
-{
-    tft.fillRect(0, 16, 320, 224, ILI9341_RED);
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(1);
-    checkPots();
-    for (int i = 0; i < 16; i++)
-    {
-        if (i < 8)
-        {
-            tft.setCursor(((i + 1) * 32), 32);
-            tft.setTextColor(ILI9341_GREEN);
-            tft.print("P");
-            tft.print(i + 1);
-            tft.setCursor(((i + 1) * 32), 64);
-            tft.setTextColor(ILI9341_WHITE);
-            tft.print(curpots[i]);
-        }
-        else
-        {
-            tft.setCursor(((i - 7) * 32), 96);
-            tft.setTextColor(ILI9341_GREEN);
-            tft.print("P");
-            tft.print(i + 1);
-            tft.setCursor(((i - 7) * 32), 128);
-            tft.setTextColor(ILI9341_WHITE);
-            tft.print(curpots[i]);
-        }
-    }
-    tft.setCursor(32, 160);
-    tft.setTextColor(ILI9341_GREEN);
-    tft.setTextSize(2);
-    tft.print("OCTAVE:");
-    tft.print(curoctave);
-    tft.setCursor(32, 184);
-    tft.setTextColor(ILI9341_YELLOW);
-    tft.setTextSize(2);
-    tft.print("SHIFT:");
-    tft.print(cur_chou);
-    tft.setCursor(32, 208);
-    tft.setTextColor(ILI9341_BLUE);
-    tft.setTextSize(2);
-    tft.print("ANALOG:");
-    tft.print("x:");
-    tft.print(curjoystick[0]);
-    tft.print("y:");
-    tft.print(curjoystick[1]);
 }
 
 void setPins()
