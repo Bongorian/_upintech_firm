@@ -207,7 +207,7 @@ void setKeys()
     {
         if ((curKeys[i] == 1) && (islongpressKeys[i] == 0))
         {
-            Keyboard.write(0x65);
+            Keyboard.write(65);
         }
         else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
         {
