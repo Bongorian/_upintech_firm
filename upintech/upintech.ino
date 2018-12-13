@@ -417,7 +417,7 @@ void setCC(byte channel)
 {
     for (int i = 0; i < 16; i++)
     {
-        midi.sendControlChange(channel, 104 + i, curpots[i])
+        midi.sendControlChange(channel, 104 + i, curpots[i]);
     }
 }
 
