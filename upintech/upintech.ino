@@ -365,21 +365,18 @@ void isBassactive(int shift)
         {
             if (midibassarray[i] < 128)
             {
-                if (i > 7)
+                if ((i == 21) || (i == 22) || (i == 23) || (i == 29) || (i == 30) || (i == 31) || (i == 37) || (i == 38) || (i == 39))
                 {
-                    if ((i > 7) && (i < 27))
+                    if (curKeys[i - 13] == 0)
                     {
-                        if ((curKeys[i] == 0) && (curKeys[i + 13] == 0))
-                        {
-                            midi.sendNoteOff(0, midibassarray[i] + shift, 127);
-                        }
+                        midi.sendNoteOff(0, midibassarray[i] + oldshift + chou, 0);
                     }
-                    if ((i > 20) && (i < 40))
+                }
+                if ((i == 8) || (i == 9) || (i == 10) || (i == 16) || (i == 17) || (i == 18) || (i == 24) || (i == 25) || (i == 26))
+                {
+                    if (curKeys[i + 13] == 0)
                     {
-                        if ((curKeys[i] == 0) && (curKeys[i - 13] == 0))
-                        {
-                            midi.sendNoteOff(0, midibassarray[i] + shift, 127);
-                        }
+                        midi.sendNoteOff(0, midibassarray[i] + oldshift + chou, 0);
                     }
                 }
             }
