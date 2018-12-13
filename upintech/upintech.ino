@@ -369,14 +369,14 @@ void isBassactive(int shift)
                 {
                     if (curKeys[i - 13] == 0)
                     {
-                        midi.sendNoteOff(0, midibassarray[i] + oldshift + chou, 0);
+                        midi.sendNoteOff(0, midibassarray[i] + shift, 0);
                     }
                 }
                 if ((i == 8) || (i == 9) || (i == 10) || (i == 16) || (i == 17) || (i == 18) || (i == 24) || (i == 25) || (i == 26))
                 {
                     if (curKeys[i + 13] == 0)
                     {
-                        midi.sendNoteOff(0, midibassarray[i] + oldshift + chou, 0);
+                        midi.sendNoteOff(0, midibassarray[i] + shift, 0);
                     }
                 }
             }
