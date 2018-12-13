@@ -234,8 +234,7 @@ void setKeys()
             }
             if (curKeys[39] == 1)
             {
-                Keyboard.write(10);
-                Keyboard.write(13);
+                Keyboard.write(keyMap[i]);
             }
             if (curKeys[33] == 0 && curKeys[36] == 0)
             {
@@ -258,20 +257,19 @@ void setKeys()
         }
         else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
         {
-            if (islongpressKeys[i] > 20)
+            if (islongpressKeys[i] > 1000)
             {
                 if (curKeys[33] == 1)
                 {
-                    Keyboard.write(keyMapLOW[i]);
+                    Keyboard.press(keyMapLOW[i]);
                 }
                 if (curKeys[36] == 1)
                 {
-                    Keyboard.write(keyMapHIGH[i]);
+                    Keyboard.press(keyMapHIGH[i]);
                 }
                 if (curKeys[39] == 1)
                 {
-                    Keyboard.write(10);
-                    Keyboard.write(13);
+                    Keyboard.press(keyMap[i]);
                 }
                 if (curKeys[33] == 0 && curKeys[36] == 0)
                 {
@@ -279,20 +277,53 @@ void setKeys()
                     {
                         if (keyMap[i] > 96 && keyMap[i] < 123)
                         {
-                            Keyboard.write(keyMap[i] - 32);
+                            Keyboard.press(keyMap[i] - 32);
                         }
                         else
                         {
-                            Keyboard.write(keyMap[i]);
+                            Keyboard.press(keyMap[i]);
                         }
                     }
                     else
                     {
-                        Keyboard.write(keyMap[i]);
+                        Keyboard.press(keyMap[i]);
                     }
                 }
             }
             islongpressKeys[i] = 1;
+        }
+        else
+        {
+            if (curKeys[33] == 1)
+            {
+                Keyboard.release(keyMapLOW[i]);
+            }
+            if (curKeys[36] == 1)
+            {
+                Keyboard.release(keyMapHIGH[i]);
+            }
+            if (curKeys[39] == 1)
+            {
+                Keyboard.release(keyMap[i]);
+            }
+            if (curKeys[33] == 0 && curKeys[36] == 0)
+            {
+                if (curKeys[4] == 1)
+                {
+                    if (keyMap[i] > 96 && keyMap[i] < 123)
+                    {
+                        Keyboard.release(keyMap[i] - 32);
+                    }
+                    else
+                    {
+                        Keyboard.release(keyMap[i]);
+                    }
+                }
+                else
+                {
+                    Keyboard.release(keyMap[i]);
+                }
+            }
         }
     }
 }
