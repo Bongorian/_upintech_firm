@@ -283,7 +283,7 @@ void setKeys()
                     }
                 }
             }
-            islongpressKeys[i] = 0;
+            islongpressKeys[i] = 1;
         }
         else
         {
