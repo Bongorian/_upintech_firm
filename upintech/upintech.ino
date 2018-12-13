@@ -77,7 +77,8 @@ void setup()
     tft.begin();
     tft.setRotation(1);
     char *title = "UP IN TECH";
-    setTitle(32, 120, ILI9341_RED, ILI9341_WHITE, 5, title);
+    setTitle(32, 120, ILI9341_RED, ILI9341_WHITE, 4, title);
+    delay(500);
 }
 
 void loop(void)
@@ -182,7 +183,7 @@ void mode3()
 void mode4()
 {
     char *title = "MODE3_MIDI_LEGACY_BASS";
-    setTitle(32, 0, ILI9341_YELLOW, ILI9341_WHITE, 2, title);
+    setTitle(32, 0, ILI9341_PINK, ILI9341_WHITE, 2, title);
     while (mode == 4)
     {
         readKeys();
