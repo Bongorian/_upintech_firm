@@ -379,6 +379,10 @@ void isBassactive(int shift)
                         midi.sendNoteOff(0, midibassarray[i] + shift, 0);
                     }
                 }
+                else
+                {
+                    midi.sendNoteOff(0, midibassarray[i] + shift, 0);
+                }
             }
         }
     }
