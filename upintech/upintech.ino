@@ -90,12 +90,10 @@ void loop(void)
     case 1:
         midi.begin();
         mode1();
-        midi.end();
         break;
     case 2:
         midi.begin();
         mode2();
-        midi.end();
         break;
     case 3:
     case 4:
