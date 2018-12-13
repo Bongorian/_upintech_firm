@@ -226,15 +226,15 @@ void setKeys()
         {
             if (curKeys[33] == 1)
             {
-                Keyboard.write(keyMapLOW[i]);
+                Keyboard.press(keyMapLOW[i]);
             }
             if (curKeys[36] == 1)
             {
-                Keyboard.write(keyMapHIGH[i]);
+                Keyboard.press(keyMapHIGH[i]);
             }
             if (curKeys[39] == 1)
             {
-                Keyboard.write(keyMap[i]);
+                Keyboard.press(keyMap[i]);
             }
             if (curKeys[33] == 0 && curKeys[36] == 0)
             {
@@ -242,55 +242,55 @@ void setKeys()
                 {
                     if (keyMap[i] > 96 && keyMap[i] < 123)
                     {
-                        Keyboard.write(keyMap[i] - 32);
-                    }
-                    else
-                    {
-                        Keyboard.write(keyMap[i]);
-                    }
-                }
-                else
-                {
-                    Keyboard.write(keyMap[i]);
-                }
-            }
-        }
-        else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
-        {
-            if (islongpressKeys[i] > 1000)
-            {
-                if (curKeys[33] == 1)
-                {
-                    Keyboard.press(keyMapLOW[i]);
-                }
-                if (curKeys[36] == 1)
-                {
-                    Keyboard.press(keyMapHIGH[i]);
-                }
-                if (curKeys[39] == 1)
-                {
-                    Keyboard.press(keyMap[i]);
-                }
-                if (curKeys[33] == 0 && curKeys[36] == 0)
-                {
-                    if (curKeys[4] == 1)
-                    {
-                        if (keyMap[i] > 96 && keyMap[i] < 123)
-                        {
-                            Keyboard.press(keyMap[i] - 32);
-                        }
-                        else
-                        {
-                            Keyboard.press(keyMap[i]);
-                        }
+                        Keyboard.press(keyMap[i] - 32);
                     }
                     else
                     {
                         Keyboard.press(keyMap[i]);
                     }
                 }
+                else
+                {
+                    Keyboard.press(keyMap[i]);
+                }
             }
-            islongpressKeys[i] = 1;
+        }
+        else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
+        {
+            // if (islongpressKeys[i] > 1000)
+            // {
+            //     if (curKeys[33] == 1)
+            //     {
+            //         Keyboard.press(keyMapLOW[i]);
+            //     }
+            //     if (curKeys[36] == 1)
+            //     {
+            //         Keyboard.press(keyMapHIGH[i]);
+            //     }
+            //     if (curKeys[39] == 1)
+            //     {
+            //         Keyboard.press(keyMap[i]);
+            //     }
+            //     if (curKeys[33] == 0 && curKeys[36] == 0)
+            //     {
+            //         if (curKeys[4] == 1)
+            //         {
+            //             if (keyMap[i] > 96 && keyMap[i] < 123)
+            //             {
+            //                 Keyboard.press(keyMap[i] - 32);
+            //             }
+            //             else
+            //             {
+            //                 Keyboard.press(keyMap[i]);
+            //             }
+            //         }
+            //         else
+            //         {
+            //             Keyboard.press(keyMap[i]);
+            //         }
+            //     }
+            // }
+            // islongpressKeys[i] = 1;
         }
         else
         {
