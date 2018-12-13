@@ -49,7 +49,8 @@ int cur_chou;
 int old_chou;
 int curoctave;
 int oldoctave;
-byte midikeyarray[40] = {200, 255, 202, 255, 203, 255, 201, 255,
+bool enCC;
+byte midikeyarray[40] = {200, 204, 202, 205, 203, 255, 201, 255,
                          255, 73, 75, 255, 78, 80, 82, 255,
                          72, 74, 76, 77, 79, 81, 83, 84,
                          255, 61, 63, 255, 66, 68, 70, 255,
@@ -134,7 +135,10 @@ void mode1()
         readJoystick();
         checkPots();
         setNote_Piano(curoctave);
-        setCC(0);
+        if (enCC)
+        {
+            setCC(0);
+        }
         viewMidiPianoinfos();
         readEnc1();
     }
@@ -203,11 +207,8 @@ void viewMidiPianoinfos()
     tft.setCursor(32, 208);
     tft.setTextColor(ILI9341_BLUE);
     tft.setTextSize(2);
-    tft.print("ANALOG:");
-    tft.print("x:");
-    tft.print(curjoystick[0]);
-    tft.print("y:");
-    tft.print(curjoystick[1]);
+    tft.print("CCMessage:");
+    tft.print(enCC);
 }
 
 void viewMidiBassinfos()
@@ -299,6 +300,14 @@ void isPianoactive(int shift)
             {
                 old_chou = cur_chou;
                 cur_chou--;
+            }
+            else if (midikeyarray[i] == 204)
+            {
+                enCC = true;
+            }
+            else if (midikeyarray[i] == 205)
+            {
+                enCC = false;
             }
             else if (midikeyarray[i] < 128)
             {
@@ -417,7 +426,7 @@ void setCC(byte channel)
 {
     for (int i = 0; i < 16; i++)
     {
-        midi.sendControlChange(channel, 104 + i, curpots[i]);
+        midi.sendControlChange(channel, 104 + i, 127 - curpots[i]);
     }
 }
 
