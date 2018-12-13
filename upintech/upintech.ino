@@ -239,7 +239,7 @@ void setKeys()
                 {
                     if (keyMap[i] > 96 && keyMap[i] < 123)
                     {
-                        Keyboard.write(keyMap[i] - 32)
+                        Keyboard.write(keyMap[i] - 32);
                     }
                     else
                     {
@@ -270,7 +270,7 @@ void setKeys()
                     {
                         if (keyMap[i] > 96 && keyMap[i] < 123)
                         {
-                            Keyboard.write(keyMap[i] - 32)
+                            Keyboard.write(keyMap[i] - 32);
                         }
                         else
                         {
