@@ -104,6 +104,7 @@ void Setlogo()
 
 void mode0()
 {
+    midi.end();
     char *title = "MODE0_USB_KEYBOARD";
     setTitle(32, 0, ILI9341_BLACK, ILI9341_WHITE, 2, title);
     while (mode == 0)
@@ -121,20 +122,19 @@ void mode1()
     {
         readKeys();
         readJoystick();
+        checkPots();
         setNote_Piano(curoctave);
         viewMidiPianoinfos();
         readEnc1();
     }
     AlloldNoteOff(curoctave, cur_chou);
-    midi.end();
 }
 
 void mode2()
 {
-    midi.begin();
-    char *title = "MODE1_MIDI_BASS";
+    char *title = "MODE2_MIDI_BASS";
     setTitle(32, 0, ILI9341_GREEN, ILI9341_WHITE, 2, title);
-    while (mode == 1)
+    while (mode == 2)
     {
         readKeys();
         readJoystick();
@@ -144,7 +144,6 @@ void mode2()
         readEnc1();
     }
     AlloldNoteOff(curoctave, cur_chou);
-    midi.end();
 }
 
 void setTitle(int x, int y, uint16_t backgroundcolor, uint16_t textcolor, uint8_t textsize, char *title)
@@ -183,7 +182,7 @@ void viewMidiBassinfos()
 {
     viewPodinfo(ILI9341_RED, ILI9341_WHITE, ILI9341_GREEN);
     tft.setCursor(32, 160);
-    tft.setTextColor(ILI9341_PINK);
+    tft.setTextColor(ILI9341_WHITE);
     tft.setTextSize(2);
     tft.print("OCTAVE:");
     tft.print(curoctave);
