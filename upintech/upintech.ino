@@ -365,9 +365,16 @@ void isBassactive(int shift)
         {
             if (midibassarray[i] < 128)
             {
-                if (i > 7)
+                if (i > 20)
                 {
-                    if ((curKeys[i] == 0) && (curKeys[i - 13] == 0) && (curKeys[i + 13] == 0))
+                    if ((curKeys[i] == 0) && (curKeys[i - 13] == 0))
+                    {
+                        midi.sendNoteOff(0, midibassarray[i] + shift, 127);
+                    }
+                }
+                if ((i > 7) && (i < 27))
+                {
+                    if ((curKeys[i] == 0) && (curKeys[i + 13] == 0))
                     {
                         midi.sendNoteOff(0, midibassarray[i] + shift, 127);
                     }
