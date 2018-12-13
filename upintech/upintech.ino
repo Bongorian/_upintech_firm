@@ -207,7 +207,7 @@ void setKeys()
     {
         if ((curKeys[i] == 1) && (islongpressKeys[i] == 0))
         {
-            Keyboard.println("bongorian");
+            Keyboard.write(0x65);
         }
         else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
         {
