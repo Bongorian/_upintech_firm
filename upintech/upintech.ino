@@ -255,7 +255,6 @@ void setKeys()
                     Keyboard.write(keyMap[i]);
                 }
             }
-            j
         }
         else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
         {
