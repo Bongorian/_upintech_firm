@@ -365,13 +365,13 @@ void isBassactive(int shift)
         {
             if (midibassarray[i] < 128)
             {
+                if (i < 21)
+                {
+                    midi.sendNoteOff(0, midibassarray[i] + shift, 127);
+                }
                 if (i > 20)
                 {
                     if ((curKeys[i] == 0) && (curKeys[i - 13] == 0))
-                    {
-                        midi.sendNoteOff(0, midibassarray[i] + shift, 127);
-                    }
-                    else
                     {
                         midi.sendNoteOff(0, midibassarray[i] + shift, 127);
                     }
