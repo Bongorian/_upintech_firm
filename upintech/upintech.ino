@@ -76,6 +76,8 @@ void setup()
     USBComposite.setProductString(product);
     tft.begin();
     tft.setRotation(1);
+    char *title = "UP IN TECH";
+    setTitle(32, 120, ILI9341_RED, ILI9341_WHITE, 5, title);
 }
 
 void loop(void)
@@ -97,7 +99,11 @@ void loop(void)
         mode2();
         break;
     case 3:
+        mode3();
+        break;
     case 4:
+        mode4();
+        break;
     case 5:
     case 6:
     case 7:
@@ -156,6 +162,30 @@ void mode2()
         checkPots();
         setNote_Bass(curoctave);
         viewMidiBassinfos();
+        readEnc1();
+    }
+    AlloldNoteOff(curoctave, cur_chou);
+}
+
+void mode3()
+{
+    char *title = "MODE3_MIDI_LEGACY_KEY";
+    setTitle(32, 0, ILI9341_BLUE, ILI9341_WHITE, 2, title);
+    while (mode == 3)
+    {
+        readKeys();
+        readEnc1();
+    }
+    AlloldNoteOff(curoctave, cur_chou);
+}
+
+void mode4()
+{
+    char *title = "MODE3_MIDI_LEGACY_BASS";
+    setTitle(32, 0, ILI9341_YELLOW, ILI9341_WHITE, 2, title);
+    while (mode == 4)
+    {
+        readKeys();
         readEnc1();
     }
     AlloldNoteOff(curoctave, cur_chou);
