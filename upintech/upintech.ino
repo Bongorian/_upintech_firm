@@ -134,6 +134,7 @@ void mode1()
         readJoystick();
         checkPots();
         setNote_Piano(curoctave);
+        setCC();
         viewMidiPianoinfos();
         readEnc1();
     }
@@ -188,7 +189,7 @@ void viewKeyboardinfos()
 
 void viewMidiPianoinfos()
 {
-    viewPodinfo(ILI9341_GREEN, ILI9341_WHITE, ILI9341_RED);
+    viewPodinfo(ILI9341_GREEN, ILI9341_WHITE, ILI9341_BLACK);
     tft.setCursor(32, 160);
     tft.setTextColor(ILI9341_GREEN);
     tft.setTextSize(2);
@@ -211,7 +212,7 @@ void viewMidiPianoinfos()
 
 void viewMidiBassinfos()
 {
-    viewPodinfo(ILI9341_RED, ILI9341_WHITE, ILI9341_GREEN);
+    viewPodinfo(ILI9341_RED, ILI9341_WHITE, ILI9341_BLACK);
     tft.setCursor(32, 160);
     tft.setTextColor(ILI9341_WHITE);
     tft.setTextSize(2);
@@ -372,7 +373,7 @@ void isBassactive(int shift)
                         midi.sendNoteOff(0, midibassarray[i] + shift, 0);
                     }
                 }
-                if ((i == 8) || (i == 9) || (i == 10) || (i == 16) || (i == 17) || (i == 18) || (i == 24) || (i == 25) || (i == 26))
+                else if ((i == 8) || (i == 9) || (i == 10) || (i == 16) || (i == 17) || (i == 18) || (i == 24) || (i == 25) || (i == 26))
                 {
                     if (curKeys[i + 13] == 0)
                     {
@@ -409,6 +410,14 @@ void AlloldNoteOff(int octave, int chou)
         {
             midi.sendNoteOn(0, midikeyarray[i] + oldshift + chou, 0);
         }
+    }
+}
+
+void setCC(byte channel)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        sendControlChange(channel, 104 + i, curpods[i])
     }
 }
 
