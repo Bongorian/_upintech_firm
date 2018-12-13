@@ -98,7 +98,7 @@ void loop(void)
     }
 }
 
-void Setlogo
+void Setlogo()
 {
 }
 
@@ -116,7 +116,7 @@ void mode1()
 {
     midi.begin();
     char *title = "MODE1_MIDI_KEYBOARD";
-    setTitle(32, 8, ILI9341_RED, ILI9341_WHITE, 2, title);
+    setTitle(32, 0, ILI9341_RED, ILI9341_WHITE, 2, title);
     while (mode == 1)
     {
         readKeys();
@@ -133,7 +133,7 @@ void mode2()
 {
     midi.begin();
     char *title = "MODE1_MIDI_BASS";
-    setTitle(32, 8, ILI9341_GREEN, ILI9341_WHITE, 2, title);
+    setTitle(32, 0, ILI9341_GREEN, ILI9341_WHITE, 2, title);
     while (mode == 1)
     {
         readKeys();
@@ -325,7 +325,7 @@ void isBassactive(int shift)
             }
             else if (midibassarray[i] < 128)
             {
-                midi.sendNoteOn(0, midibarassray[i] + shift, 127);
+                midi.sendNoteOn(0, midibassarray[i] + shift, 127);
             }
         }
         else if ((curKeys[i] == 1) && (islongpressKeys[i] != 0))
